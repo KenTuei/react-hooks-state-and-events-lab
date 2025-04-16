@@ -1,24 +1,39 @@
-import React from "react";
-import Item from "./Item";
+// components/ShoppingList.js
+import React, { useState } from 'react';
+import Item from './Item';
 
-function ShoppingList({ items }) {
+// Sample items prop for example purposes
+// Each item is assumed to have a name and category
+// Example: [{ name: 'Apple', category: 'Produce' }, { name: 'Milk', category: 'Dairy' }]
+
+const ShoppingList = ({ items }) => {
+  const [selectedCategory, setSelectedCategory] = useState("All");
+
+  const handleCategoryChange = (event) => {
+    setSelectedCategory(event.target.value);
+  };
+
+  const itemsToDisplay = items.filter(item => {
+    return selectedCategory === "All" || item.category === selectedCategory;
+  });
+
   return (
     <div className="ShoppingList">
-      <div className="Filter">
-        <select name="filter">
-          <option value="All">Filter by category</option>
+      <div className="filter">
+        <select name="filter" onChange={handleCategoryChange} value={selectedCategory}>
+          <option value="All">All</option>
           <option value="Produce">Produce</option>
           <option value="Dairy">Dairy</option>
           <option value="Dessert">Dessert</option>
         </select>
       </div>
       <ul className="Items">
-        {items.map((item) => (
-          <Item key={item.id} name={item.name} category={item.category} />
+        {itemsToDisplay.map((item, index) => (
+          <Item key={index} name={item.name} />
         ))}
       </ul>
     </div>
   );
-}
+};
 
 export default ShoppingList;
